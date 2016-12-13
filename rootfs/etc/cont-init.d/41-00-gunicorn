@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv sh
+
+# If is to install pip modules
+if [ ! -z "$PIP_INSTALL" ]; then
+    echo "***"
+    echo "installing python modules using: pip install $PIP_INSTALL"
+    echo "***"
+    pip install $PIP_INSTALL
+fi
+
+

@@ -1,0 +1,1 @@
+{"_default": {}, "pets": {"1": {"name": "Susie", "tags": [{"id": 1, "name": "awesome"}], "_cuid": "ciwo021z400008gmv8a62u8ip", "_last_update": "{TinyDateTime}:2016-12-13T21:07:52", "_created_at": "{TinyDateTime}:2016-12-13T21:07:52", "animal_type": "cat", "id": "123"}}}

@@ -1,0 +1,229 @@
+
+swagger: '2.0'
+info:
+    title: API Server
+    description: |
+
+        API server boilerplate using Connexion
+
+    version: "0.1.0"
+    termsOfService: http://daspanel.com/terms/
+    contact:
+        name: Abner G Jacobsen
+        email: admin@daspanel.com
+        url: http://daspanel.com
+    license:
+        name: GNU General Public License v3
+        url: https://opensource.org/licenses
+
+schemes:
+    - http
+    - https
+consumes:
+    - application/json
+produces:
+    - application/json
+
+security:
+    - internalApiKey: []
+securityDefinitions:
+    internalApiKey:
+        type: apiKey
+        in: header
+        name: X-Api-Key
+
+paths:
+  /:
+    post:
+      tags: [Pets]
+      operationId: modules.pets.api.post_pet
+      summary: Create a pet
+      parameters:
+        - name: pet
+          in: body
+          schema:
+            $ref: '#/definitions/NewPet'
+      responses:
+        201:
+          description: New pet created
+    get:
+      tags: [Pets]
+      operationId: modules.pets.api.get_pets
+      summary: Get all pets
+      parameters:
+        - name: animal_type
+          in: query
+          type: string
+          pattern: "^[a-zA-Z0-9]*$"
+        - name: limit
+          in: query
+          type: integer
+          minimum: 0
+          default: 100
+      responses:
+        200:
+          description: Return pets
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pet'
+  /{pet_id}:
+    get:
+      tags: [Pets]
+      operationId: modules.pets.api.get_pet
+      summary: Get a single pet
+      parameters:
+        - $ref: '#/parameters/pet_id'
+      responses:
+        200:
+          description: Return pet
+          schema:
+            $ref: '#/definitions/Pet'
+        404:
+          description: Pet does not exist
+    put:
+      tags: [Pets]
+      operationId: modules.pets.api.put_pet
+      summary: Create or update a pet
+      parameters:
+        - $ref: '#/parameters/pet_id'
+        - name: pet
+          in: body
+          schema:
+            $ref: '#/definitions/UpdatePet'
+      responses:
+        204:
+          description: Pet updated
+    delete:
+      tags: [Pets]
+      operationId: modules.pets.api.delete_pet
+      summary: Remove a pet
+      parameters:
+        - $ref: '#/parameters/pet_id'
+      responses:
+        204:
+          description: Pet was deleted
+        404:
+          description: Pet does not exist
+
+
+parameters:
+  pet_id:
+    name: pet_id
+    description: Pet's Unique identifier
+    in: path
+    type: string
+    required: true
+    pattern: "^[a-zA-Z0-9-]+$"
+
+definitions:
+  UpdatePet:
+    type: object
+    required:
+      - name
+      - animal_type
+    properties:
+      name:
+        type: string
+        description: Pet's name
+        example: "Susie"
+        minLength: 1
+        maxLength: 100
+      animal_type:
+        type: string
+        description: Kind of animal
+        example: "cat"
+        minLength: 1
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/Tag"
+
+  NewPet:
+    type: object
+    required:
+      - id
+      - name
+      - animal_type
+    properties:
+      id:
+        type: string
+        description: Unique identifier
+        example: "123"
+      name:
+        type: string
+        description: Pet's name
+        example: "Susie"
+        minLength: 1
+        maxLength: 100
+      animal_type:
+        type: string
+        description: Kind of animal
+        example: "cat"
+        minLength: 1
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/Tag"
+
+  Pet:
+    type: object
+    required:
+      - name
+      - animal_type
+    properties:
+      id:
+        type: string
+        description: Unique identifier
+        example: "123"
+        readOnly: true
+      name:
+        type: string
+        description: Pet's name
+        example: "Susie"
+        minLength: 1
+        maxLength: 100
+      animal_type:
+        type: string
+        description: Kind of animal
+        example: "cat"
+        minLength: 1
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/Tag"
+      _created_at:
+        type: string
+        format: date-time
+        description: Creation time
+        example: "2016-07-25T13:20:41"
+        readOnly: true
+      _last_updated:
+        type: string
+        format: date-time
+        description: Last update time
+        example: "2016-07-25T13:20:41"
+        readOnly: true
+      _cuid:
+        type: string
+        description: Universal unique id of the record
+        example: "cir22a51g0005mw45ay17gkeh"
+        minLength: 25
+        maxLength: 25
+        readOnly: true
+
+  Tag:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        example: 1
+        format: int64
+      name:
+        type: string
+        example: "awesome"
+        maxLength: 20
+

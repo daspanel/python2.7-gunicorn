@@ -1,0 +1,44 @@
+version: '2'
+services:
+    daspanel-python2.7-gunicorn:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: daspanel/python2.7-gunicorn
+        volumes:
+            #- daspanel-data-dev:/opt/daspanel/data
+            - ./app_data:/opt/daspanel/data
+            - ./app_src:/opt/daspanel/apps/example_app
+        networks:
+            - frontend
+            - backend
+        environment:
+            - GUNICORN_APP_DIR=/opt/daspanel/apps/example_app
+            - GUNICORN_CMD=/opt/daspanel/apps/example_app/wsgi_gunicorn --user=daspanel --group=daspanel app:app Api_Server
+            - PIP_INSTALL=-r /opt/daspanel/apps/example_app/requirements.txt
+        env_file:
+            - daspanel.env
+            - smtp.env
+        expose:
+            - "5000"
+        ports:
+            - "5000:5000"
+
+volumes:
+    #daspanel-data:
+    #    external:
+    #        name: daspanel-data
+    #daspanel-data-dev:
+    #    driver: local
+    #    driver_opts:
+    #        type: none
+    #        device: /home/abner/Devel/data
+    #        o: bind
+
+networks:  
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+
