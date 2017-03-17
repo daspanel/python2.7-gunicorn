@@ -14,7 +14,7 @@ RUN set -ex \
     && apk add --no-cache libssl1.0 libcurl \
     && apk add --no-cache --update --virtual=.build-deps \
         bash gcc musl-dev git \
-        openssl-dev curl curl-dev python-dev libffi-dev \
+        libressl-dev curl curl-dev python-dev libffi-dev \
 
     # Install python, pip
     && apk add --no-cache --update python \
